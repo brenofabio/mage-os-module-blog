@@ -27,6 +27,34 @@ final class HyvaThemeDetectionTest extends TestCase
     }
 
     #[Test]
+    public function detects_hyva_in_code_only_not_path(): void
+    {
+        $theme = $this->createMock(ThemeInterface::class);
+        $theme->method('getCode')->willReturn('Hyva/default');
+        $theme->method('getThemePath')->willReturn('Vendor/custom');
+        $theme->method('getParentTheme')->willReturn(null);
+
+        $design = $this->createMock(DesignInterface::class);
+        $design->method('getDesignTheme')->willReturn($theme);
+
+        self::assertTrue((new HyvaThemeDetection($design))->execute());
+    }
+
+    #[Test]
+    public function detects_hyva_in_path_only_not_code(): void
+    {
+        $theme = $this->createMock(ThemeInterface::class);
+        $theme->method('getCode')->willReturn('Vendor/custom');
+        $theme->method('getThemePath')->willReturn('Hyva/default');
+        $theme->method('getParentTheme')->willReturn(null);
+
+        $design = $this->createMock(DesignInterface::class);
+        $design->method('getDesignTheme')->willReturn($theme);
+
+        self::assertTrue((new HyvaThemeDetection($design))->execute());
+    }
+
+    #[Test]
     public function detects_hyva_via_parent_theme(): void
     {
         $parent = $this->createMock(ThemeInterface::class);
@@ -60,6 +88,29 @@ final class HyvaThemeDetectionTest extends TestCase
 
         $design = $this->createMock(DesignInterface::class);
         $design->method('getDesignTheme')->willReturn($luma);
+
+        self::assertFalse((new HyvaThemeDetection($design))->execute());
+    }
+
+    #[Test]
+    public function returns_false_when_design_has_no_theme(): void
+    {
+        $design = $this->createMock(DesignInterface::class);
+        $design->method('getDesignTheme')->willReturn(null);
+
+        self::assertFalse((new HyvaThemeDetection($design))->execute());
+    }
+
+    #[Test]
+    public function handles_null_theme_path_without_error(): void
+    {
+        $theme = $this->createMock(ThemeInterface::class);
+        $theme->method('getCode')->willReturn('Magento/luma');
+        $theme->method('getThemePath')->willReturn(null);
+        $theme->method('getParentTheme')->willReturn(null);
+
+        $design = $this->createMock(DesignInterface::class);
+        $design->method('getDesignTheme')->willReturn($theme);
 
         self::assertFalse((new HyvaThemeDetection($design))->execute());
     }
