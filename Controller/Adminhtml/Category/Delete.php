@@ -41,7 +41,10 @@ class Delete extends Action implements HttpGetActionInterface
         } catch (NoSuchEntityException) {
             $this->messageManager->addErrorMessage((string) __('Category not found.'));
         } catch (\Exception $e) {
-            $this->messageManager->addExceptionMessage($e, (string) __('Could not delete category: %1', $e->getMessage()));
+            $this->messageManager->addExceptionMessage(
+                $e,
+                (string) __('Could not delete category: %1', $e->getMessage())
+            );
             return $result->setPath('*/*/edit', ['category_id' => $categoryId]);
         }
 

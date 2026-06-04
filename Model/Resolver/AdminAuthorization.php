@@ -21,8 +21,7 @@ class AdminAuthorization
 
         if (method_exists($context, 'getExtensionAttributes')) {
             $extensionAttributes = $context->getExtensionAttributes();
-            if (
-                \is_object($extensionAttributes)
+            if (\is_object($extensionAttributes)
                 && method_exists($extensionAttributes, 'getIsAdmin')
             ) {
                 $isAdmin = (bool) $extensionAttributes->getIsAdmin();

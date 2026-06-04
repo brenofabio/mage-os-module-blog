@@ -124,8 +124,8 @@ class PostsByAssignmentProvider
         foreach ($postIds as $postId) {
             try {
                 $posts[] = $this->repository->getById((int) $postId);
-            } catch (NoSuchEntityException) {
-                // post was deleted between pivot-fetch and hydrate; skip
+            } catch (NoSuchEntityException) { // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+                // Post was deleted between pivot-fetch and hydrate; skip.
             }
         }
 

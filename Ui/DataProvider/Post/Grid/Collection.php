@@ -15,6 +15,7 @@ use Psr\Log\LoggerInterface as Logger;
 
 class Collection extends SearchResult implements SearchResultInterface
 {
+    // phpcs:ignore Generic.CodeAnalysis.UselessOverridingMethod.Found -- sets module-specific $mainTable and $resourceModel defaults
     public function __construct(
         EntityFactoryInterface $entityFactory,
         Logger $logger,

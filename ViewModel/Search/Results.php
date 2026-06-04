@@ -212,8 +212,8 @@ class Results implements ArgumentInterface
         foreach ($rows as $row) {
             try {
                 $items[] = $this->repository->getById((int) $row['post_id']);
-            } catch (NoSuchEntityException) {
-                // skip deleted
+            } catch (NoSuchEntityException) { // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+                // Post was deleted between search and hydrate; skip.
             }
         }
         $this->cachedItems = $items;

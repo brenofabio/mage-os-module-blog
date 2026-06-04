@@ -55,10 +55,12 @@ class Index implements HttpGetActionInterface
         $channel = $xml->createElement('channel');
         $rss->appendChild($channel);
 
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction.DiscouragedWithAlternative -- ENT_XML1 context, not HTML
         $channel->appendChild($xml->createElement(
             'title',
             htmlspecialchars((string) ($data['title'] ?? ''), ENT_XML1)
         ));
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction.DiscouragedWithAlternative -- ENT_XML1 context, not HTML
         $channel->appendChild($xml->createElement(
             'description',
             htmlspecialchars((string) ($data['description'] ?? ''), ENT_XML1)
@@ -67,6 +69,7 @@ class Index implements HttpGetActionInterface
 
         foreach ((array) ($data['entries'] ?? []) as $entry) {
             $item = $xml->createElement('item');
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction.DiscouragedWithAlternative -- ENT_XML1 context, not HTML
             $item->appendChild($xml->createElement(
                 'title',
                 htmlspecialchars((string) ($entry['title'] ?? ''), ENT_XML1)

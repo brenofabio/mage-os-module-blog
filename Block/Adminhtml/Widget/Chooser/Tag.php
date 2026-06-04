@@ -45,8 +45,8 @@ class Tag extends Extended
             try {
                 $tag = $this->repository->getById((int) $element->getValue());
                 $chooser->setLabel($this->escapeHtml((string) $tag->getTitle()));
-            } catch (\Throwable) {
-                // ignore
+            } catch (\Throwable) { // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+                // Entity no longer exists; show no label in the chooser.
             }
         }
         $element->setData('after_element_html', $chooser->toHtml());

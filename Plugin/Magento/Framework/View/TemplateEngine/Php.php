@@ -41,7 +41,7 @@ class Php
         }
 
         $hyvaPath = substr($fileName, 0, $position + \strlen(self::MODULE_PATH_SEGMENT)) . 'hyva/' . $suffix;
-        if (is_file($hyvaPath)) {
+        if (is_file($hyvaPath)) { // phpcs:ignore Magento2.Functions.DiscouragedFunction.DiscouragedWithAlternative
             return [$block, $hyvaPath, $dictionary];
         }
 

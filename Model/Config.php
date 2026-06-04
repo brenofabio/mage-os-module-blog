@@ -61,7 +61,11 @@ class Config
 
     public function getDefaultRobots(?int $storeId = null): string
     {
-        return (string) $this->scopeConfig->getValue(self::XML_PATH_DEFAULT_ROBOTS, ScopeInterface::SCOPE_STORE, $storeId);
+        return (string) $this->scopeConfig->getValue(
+            self::XML_PATH_DEFAULT_ROBOTS,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
     }
 
     public function isSidebarWidgetEnabled(string $widget, ?int $storeId = null): bool
@@ -80,12 +84,20 @@ class Config
 
     public function getRecentPostsCount(?int $storeId = null): int
     {
-        return (int) $this->scopeConfig->getValue(self::XML_PATH_SIDEBAR_RECENT_POSTS_COUNT, ScopeInterface::SCOPE_STORE, $storeId);
+        return (int) $this->scopeConfig->getValue(
+            self::XML_PATH_SIDEBAR_RECENT_POSTS_COUNT,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
     }
 
     public function getOgDefaultType(?int $storeId = null): string
     {
-        return (string) $this->scopeConfig->getValue(self::XML_PATH_SEO_OG_DEFAULT_TYPE, ScopeInterface::SCOPE_STORE, $storeId);
+        return (string) $this->scopeConfig->getValue(
+            self::XML_PATH_SEO_OG_DEFAULT_TYPE,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
     }
 
     public function isJsonLdEnabled(?int $storeId = null): bool
@@ -95,7 +107,11 @@ class Config
 
     public function getTwitterSite(?int $storeId = null): string
     {
-        return (string) $this->scopeConfig->getValue(self::XML_PATH_SEO_TWITTER_SITE, ScopeInterface::SCOPE_STORE, $storeId);
+        return (string) $this->scopeConfig->getValue(
+            self::XML_PATH_SEO_TWITTER_SITE,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
     }
 
     public function isSitemapEntityEnabled(string $entity, ?int $storeId = null): bool
@@ -124,7 +140,11 @@ class Config
      */
     public function getSocialNetworks(?int $storeId = null): array
     {
-        $raw = (string) $this->scopeConfig->getValue(self::XML_PATH_SOCIAL_NETWORKS, ScopeInterface::SCOPE_STORE, $storeId);
+        $raw = (string) $this->scopeConfig->getValue(
+            self::XML_PATH_SOCIAL_NETWORKS,
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
         if ($raw === '') {
             return [];
         }

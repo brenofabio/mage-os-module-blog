@@ -45,8 +45,8 @@ class Category extends Extended
             try {
                 $category = $this->repository->getById((int) $element->getValue());
                 $chooser->setLabel($this->escapeHtml((string) $category->getTitle()));
-            } catch (\Throwable) {
-                // ignore
+            } catch (\Throwable) { // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+                // Entity no longer exists; show no label in the chooser.
             }
         }
         $element->setData('after_element_html', $chooser->toHtml());

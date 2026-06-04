@@ -34,8 +34,8 @@ class ManualRelationLoader
         foreach ($ids as $id) {
             try {
                 $items[] = $this->repository->getById($id);
-            } catch (NoSuchEntityException) {
-                // skip deleted
+            } catch (NoSuchEntityException) { // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+                // Post was deleted between pivot-fetch and hydrate; skip.
             }
         }
         return $items;

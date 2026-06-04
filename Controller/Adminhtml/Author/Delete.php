@@ -42,7 +42,10 @@ class Delete extends Action implements HttpGetActionInterface
         } catch (NoSuchEntityException) {
             $this->messageManager->addErrorMessage((string) __('Author not found.'));
         } catch (\Exception $e) {
-            $this->messageManager->addExceptionMessage($e, (string) __('Could not delete author: %1', $e->getMessage()));
+            $this->messageManager->addExceptionMessage(
+                $e,
+                (string) __('Could not delete author: %1', $e->getMessage())
+            );
             return $result->setPath('*/*/edit', ['author_id' => $authorId]);
         }
 

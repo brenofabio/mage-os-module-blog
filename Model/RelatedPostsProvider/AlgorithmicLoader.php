@@ -54,7 +54,10 @@ class AlgorithmicLoader
         $union = [];
         if ($categoryIds !== []) {
             $union[] = $connection->select()
-                ->from(['c' => $categoryTable], ['post_id', 'category_id AS term_id', new \Zend_Db_Expr("'cat' AS kind")])
+                ->from(
+                    ['c' => $categoryTable],
+                    ['post_id', 'category_id AS term_id', new \Zend_Db_Expr("'cat' AS kind")]
+                )
                 ->where('c.category_id IN (?)', $categoryIds);
         }
         if ($tagIds !== []) {
@@ -86,8 +89,8 @@ class AlgorithmicLoader
         foreach ($ids as $id) {
             try {
                 $items[] = $this->repository->getById($id);
-            } catch (NoSuchEntityException) {
-                // skip
+            } catch (NoSuchEntityException) { // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+                // Post was deleted between pivot-fetch and hydrate; skip.
             }
         }
         return $items;

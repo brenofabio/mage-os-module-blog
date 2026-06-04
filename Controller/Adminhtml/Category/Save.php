@@ -65,7 +65,10 @@ class Save extends Action implements HttpPostActionInterface
             $this->storeSession($data);
             return $result->setPath('*/*/edit', ['category_id' => $categoryId]);
         } catch (\Exception $e) {
-            $this->messageManager->addExceptionMessage($e, (string) __('Could not save category: %1', $e->getMessage()));
+            $this->messageManager->addExceptionMessage(
+                $e,
+                (string) __('Could not save category: %1', $e->getMessage())
+            );
             $this->storeSession($data);
             return $result->setPath('*/*/edit', ['category_id' => $categoryId]);
         }
