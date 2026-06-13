@@ -255,6 +255,21 @@
     color: var(--mageos-blog-meta);
 }
 
+.mageos-blog-share__link {
+    font-weight: 600;
+}
+
+.mageos-blog-widget--archive .mageos-blog-widget__item > a {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.mageos-blog-widget__count {
+    color: var(--mageos-blog-meta);
+    font-size: var(--mageos-blog-meta-size);
+}
+
 .mageos-blog-related {
     margin-top: 2rem;
 }

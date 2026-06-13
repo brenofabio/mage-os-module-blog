@@ -25,6 +25,10 @@
                        name="mageos_blog.sidebar.tags"
                        as="tag_cloud"
                        template="MageOS_Blog::sidebar/tags.phtml"/>
+                <block class="MageOS\Blog\Block\Sidebar\Archive"
+                       name="mageos_blog.sidebar.archive"
+                       as="archive"
+                       template="MageOS_Blog::sidebar/archive.phtml"/>
             </block>
         </referenceContainer>
     </body>

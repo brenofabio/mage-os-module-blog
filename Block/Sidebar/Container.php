@@ -14,6 +14,7 @@ class Container extends Template
         'recent_posts',
         'category_list',
         'tag_cloud',
+        'archive',
     ];
 
     /**

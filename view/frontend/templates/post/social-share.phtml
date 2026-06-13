@@ -1,0 +1,28 @@
+<?php
+
+declare(strict_types=1);
+
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \MageOS\Blog\ViewModel\Post\Detail $detailViewModel */
+/** @var \MageOS\Blog\ViewModel\Post\SocialShare $shareViewModel */
+
+$detailViewModel = $block->getData('detail_view_model');
+$shareViewModel = $block->getData('share_view_model');
+$links = $shareViewModel->getLinks($detailViewModel->getTitle(), $detailViewModel->getCanonicalUrl());
+?>
+<?php if ($links !== []): ?>
+    <nav class="mageos-blog-share" aria-label="<?= $escaper->escapeHtmlAttr(__('Share this post')); ?>">
+        <span class="mageos-blog-share__label"><?= $escaper->escapeHtml(__('Share:')); ?></span>
+        <?php foreach ($links as $link): ?>
+            <a class="mageos-blog-share__link mageos-blog-share__link--<?= $escaper->escapeHtmlAttr($link['key']); ?>"
+               href="<?= $escaper->escapeUrl($link['url']); ?>"
+               <?php if ($link['key'] !== 'email'): ?>
+                   target="_blank"
+                   rel="noopener noreferrer"
+               <?php endif; ?>>
+                <?= $escaper->escapeHtml($link['label']); ?>
+            </a>
+        <?php endforeach; ?>
+    </nav>
+<?php endif; ?>

@@ -72,6 +72,8 @@ $relatedPosts = $viewModel->getRelatedPosts();
             </ul>
         <?php endif; ?>
 
+        <?= /** @noEscape */ $block->getChildHtml('social_share'); ?>
+
         <?php if ($relatedPosts !== []): ?>
             <section class="mageos-blog-related">
                 <h2 class="mageos-blog-related__title"><?= $escaper->escapeHtml(__('Related posts')); ?></h2>

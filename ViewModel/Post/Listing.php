@@ -85,6 +85,16 @@ class Listing implements ArgumentInterface
         return $this->urlBuilder->getUrl('blog', ['_query' => $current]);
     }
 
+    public function getArchiveMonth(): ?string
+    {
+        $month = trim((string) $this->request->getParam('archive', ''));
+        if (!preg_match('/^(\d{4})-(0[1-9]|1[0-2])$/', $month, $matches)) {
+            return null;
+        }
+
+        return checkdate((int) $matches[2], 1, (int) $matches[1]) ? $month : null;
+    }
+
     public function getPostUrl(PostInterface $post): string
     {
         return $this->urlBuilder->getUrl('blog/' . $post->getUrlKey());
@@ -166,12 +176,23 @@ class Listing implements ArgumentInterface
             ->create();
         $criteria = $this->criteriaBuilder
             ->addFilter(PostInterface::STATUS, BlogPostStatus::Published->value)
-            ->addSortOrder($sort)
+            ->addSortOrder($sort);
+        $archiveMonth = $this->getArchiveMonth();
+        if ($archiveMonth !== null) {
+            $start = new \DateTimeImmutable($archiveMonth . '-01 00:00:00');
+            $criteria
+                ->addFilter(PostInterface::PUBLISH_DATE, $start->format('Y-m-d H:i:s'), 'gteq')
+                ->addFilter(
+                    PostInterface::PUBLISH_DATE,
+                    $start->modify('first day of next month')->format('Y-m-d H:i:s'),
+                    'lt'
+                );
+        }
+        $criteria
             ->setPageSize($this->getPageSize())
-            ->setCurrentPage($this->getCurrentPage())
-            ->create();
+            ->setCurrentPage($this->getCurrentPage());
 
-        $results = $this->repository->getList($criteria);
+        $results = $this->repository->getList($criteria->create());
         $this->cachedResults = ['items' => $results->getItems(), 'total' => $results->getTotalCount()];
 
         return $this->cachedResults;
