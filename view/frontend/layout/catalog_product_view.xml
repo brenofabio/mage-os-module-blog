@@ -9,6 +9,8 @@
                    group="detailed_info">
                 <arguments>
                     <argument name="title" translate="true" xsi:type="string">Related Posts</argument>
+                    <argument name="view_model" xsi:type="object">MageOS\Blog\ViewModel\Product\RelatedPosts</argument>
+                    <argument name="listing_view_model" xsi:type="object">MageOS\Blog\ViewModel\Post\Listing</argument>
                 </arguments>
             </block>
         </referenceContainer>

@@ -54,6 +54,21 @@ class PostsByAssignmentProvider
     /**
      * @return PostInterface[]
      */
+    public function byProduct(int $productId, int $storeId, int $limit = 4): array
+    {
+        return $this->load(
+            'mageos_blog_post_related_product',
+            'product_id',
+            $productId,
+            $storeId,
+            $limit,
+            ['pv.position ASC', 'p.publish_date DESC'],
+        );
+    }
+
+    /**
+     * @return PostInterface[]
+     */
     public function byAuthor(int $authorId, int $storeId, int $limit = 50): array
     {
         $connection = $this->resource->getConnection();
@@ -78,6 +93,8 @@ class PostsByAssignmentProvider
     }
 
     /**
+     * @param string[] $order
+     *
      * @return PostInterface[]
      */
     private function load(
@@ -86,6 +103,7 @@ class PostsByAssignmentProvider
         int $id,
         int $storeId,
         int $limit,
+        array $order = ['p.publish_date DESC'],
     ): array {
         $connection = $this->resource->getConnection();
         $postTable = $this->resource->getTableName('mageos_blog_post');
@@ -107,8 +125,11 @@ class PostsByAssignmentProvider
             ->where('p.status = ?', BlogPostStatus::Published->value)
             ->where('s.store_id IN (?) OR s.store_id IS NULL', [$storeId, 0])
             ->group('p.post_id')
-            ->order('p.publish_date DESC')
             ->limit($limit);
+
+        foreach ($order as $orderBy) {
+            $select->order($orderBy);
+        }
 
         return $this->hydrate($connection->fetchCol($select));
     }
