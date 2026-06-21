@@ -10,6 +10,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use MageOS\Blog\Api\AuthorRepositoryInterface;
+use MageOS\Blog\Api\Data\AuthorInterface;
 use MageOS\Blog\Api\Data\PostInterface;
 use MageOS\Blog\Api\RelatedPostsProviderInterface;
 use MageOS\Blog\Api\TagRepositoryInterface;
@@ -158,18 +159,26 @@ final class DetailTest extends TestCase
         $post = $this->makePost([
             'title' => 'Hello World',
             'publish_date' => '2026-04-10 09:00:00',
+            'author_id' => 7,
         ]);
         $this->registerPost($post);
         $this->config->method('isJsonLdEnabled')->willReturn(true);
 
         $store = $this->createMock(Store::class);
-        $store->method('getName')->willReturn('Test Store');
+        $store->method('getConfig')
+            ->with('general/store_information/name')
+            ->willReturn('FX Acesso');
         $store->method('getBaseUrl')->willReturn('https://shop.test/');
         $this->storeManager->method('getStore')->willReturn($store);
 
-        $this->urlBuilder->method('getUrl')
-            ->with('blog/hello-world')
-            ->willReturn('https://shop.test/blog/hello-world');
+        $author = $this->createMock(AuthorInterface::class);
+        $author->method('getName')->willReturn('Blog Author');
+        $author->method('getSlug')->willReturn('blog-author');
+        $this->authorRepository->method('getById')->with(7)->willReturn($author);
+
+        $this->urlBuilder->method('getUrl')->willReturnCallback(
+            static fn (string $route): string => 'https://shop.test/' . $route
+        );
 
         $detail = $this->makeViewModel();
         $json = $detail->getJsonLd();
@@ -182,7 +191,11 @@ final class DetailTest extends TestCase
         self::assertSame('Hello World', $decoded['headline']);
         self::assertIsArray($decoded['publisher']);
         self::assertSame('Organization', $decoded['publisher']['@type']);
-        self::assertSame('Test Store', $decoded['publisher']['name']);
+        self::assertSame('https://shop.test/#organization', $decoded['publisher']['@id']);
+        self::assertSame('FX Acesso', $decoded['publisher']['name']);
+        self::assertSame('Person', $decoded['author']['@type']);
+        self::assertSame('Blog Author', $decoded['author']['name']);
+        self::assertSame('https://shop.test/blog/author/blog-author', $decoded['author']['url']);
         self::assertIsArray($decoded['mainEntityOfPage']);
         self::assertSame('https://shop.test/blog/hello-world', $decoded['mainEntityOfPage']['@id']);
     }
@@ -204,6 +217,7 @@ final class DetailTest extends TestCase
         $post->method('getFeaturedImage')->willReturn($attrs['featured_image'] ?? null);
         $post->method('getShortContent')->willReturn($attrs['short_content'] ?? null);
         $post->method('getPublishDate')->willReturn($attrs['publish_date'] ?? null);
+        $post->method('getAuthorId')->willReturn($attrs['author_id'] ?? null);
 
         return $post;
     }

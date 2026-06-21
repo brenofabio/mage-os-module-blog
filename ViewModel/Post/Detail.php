@@ -288,10 +288,16 @@ class Detail implements ArgumentInterface
         }
 
         $store = $this->storeManager->getStore();
+        $baseUrl = rtrim($store->getBaseUrl(), '/') . '/';
+        $publisherName = trim((string) $store->getConfig('general/store_information/name'));
+        if ($publisherName === '') {
+            $publisherName = (string) $store->getWebsite()->getName();
+        }
         $publisher = [
             '@type' => 'Organization',
-            'name' => (string) $store->getName(),
-            'url' => $store->getBaseUrl(),
+            '@id' => $baseUrl . '#organization',
+            'name' => $publisherName,
+            'url' => $baseUrl,
         ];
 
         $data = [
@@ -304,6 +310,18 @@ class Detail implements ArgumentInterface
                 '@id' => $this->getCanonicalUrl(),
             ],
         ];
+
+        $author = $this->loadAuthor($post);
+        if ($author !== null && trim($author->getName()) !== '') {
+            $data['author'] = [
+                '@type' => 'Person',
+                'name' => $author->getName(),
+            ];
+            $authorUrl = $this->getAuthorUrl($post);
+            if ($authorUrl !== null) {
+                $data['author']['url'] = $authorUrl;
+            }
+        }
 
         $published = $this->formatIso($post->getPublishDate());
         if ($published !== '') {
